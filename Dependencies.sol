@@ -159,10 +159,9 @@ contract IERC721Metadata is IERC721 {
     function name() external view returns (string memory);
     function symbol() external view returns (string memory);
     function tokenURI(uint256 tokenId) external view returns (string memory);
-    function eventName(uint256 tokenId) external view returns (string memory);
-    function eventDate(uint256 tokenId) external view returns (string memory);
-    function eventLocation(uint256 tokenId) external view returns (string memory);
-    function ticketType(uint256 tokenId) external view returns (string memory);
+    function author(uint256 tokenId) external view returns (string memory);
+    function tweet(uint256 tokenId) external view returns (string memory);
+    function tweetId(uint256 tokenId) external view returns (string memory);
 }
 
 
@@ -431,10 +430,9 @@ contract ERC721Metadata is Context, ERC165, ERC721, IERC721Metadata {
 
     // Optional mapping for token URIs
     mapping(uint256 => string) private _tokenURIs;
-    mapping(uint256 => string) private _tokenName;
-    mapping(uint256 => string) private _tokenType;
-    mapping(uint256 => string) private _tokenDate;
-    mapping(uint256 => string) private _tokenLocation;
+    mapping(uint256 => string) private _tokenauthor;
+    mapping(uint256 => string) private _tokentweet;
+    mapping(uint256 => string) private _tokentweetId;
     bytes4 private constant _INTERFACE_ID_ERC721_METADATA = 0x5b5e139f;
     constructor (string memory name, string memory symbol) public {
         _name = name;
@@ -458,40 +456,31 @@ contract ERC721Metadata is Context, ERC165, ERC721, IERC721Metadata {
         _tokenURIs[tokenId] = uri;
     }
     
-    function eventName(uint256 tokenId) external view returns (string memory) {
+    function author(uint256 tokenId) external view returns (string memory) {
         require(_exists(tokenId), "ERC721Metadata: Name query for nonexistent token");
-        return _tokenName[tokenId];
+        return _tokenauthor[tokenId];
     }
-    function _setTokenName(uint256 tokenId, string memory ticketName) internal {
+    function _setTokenauthor(uint256 tokenId, string memory tweetauthor) internal {
         require(_exists(tokenId), "ERC721Metadata: Name set of nonexistent token");
-        _tokenName[tokenId] = ticketName;
+        _tokenauthor[tokenId] = tweetauthor;
     }
     
-    function eventDate(uint256 tokenId) external view returns (string memory) {
+    function tweet(uint256 tokenId) external view returns (string memory) {
         require(_exists(tokenId), "ERC721Metadata: Name query for nonexistent token");
-        return _tokenDate[tokenId];
+        return _tokentweet[tokenId];
     }
-    function _setTokenDate(uint256 tokenId, string memory ticketDate) internal {
+    function _setTokentweet(uint256 tokenId, string memory tweetcontent) internal {
         require(_exists(tokenId), "ERC721Metadata: Name set of nonexistent token");
-        _tokenDate[tokenId] = ticketDate;
+        _tokentweet[tokenId] = tweetcontent;
     }
     
-    function eventLocation(uint256 tokenId) external view returns (string memory) {
+    function tweetId(uint256 tokenId) external view returns (string memory) {
         require(_exists(tokenId), "ERC721Metadata: Name query for nonexistent token");
-        return _tokenLocation[tokenId];
+        return _tokentweetId[tokenId];
     }
-    function _setTokenLocation(uint256 tokenId, string memory ticketLocation) internal {
+    function _setTokentweetId(uint256 tokenId, string memory tweetIdType) internal {
         require(_exists(tokenId), "ERC721Metadata: Name set of nonexistent token");
-        _tokenLocation[tokenId] = ticketLocation;
-    }
-    
-    function ticketType(uint256 tokenId) external view returns (string memory) {
-        require(_exists(tokenId), "ERC721Metadata: Name query for nonexistent token");
-        return _tokenType[tokenId];
-    }
-    function _setTokenType(uint256 tokenId, string memory EventTicketType) internal {
-        require(_exists(tokenId), "ERC721Metadata: Name set of nonexistent token");
-        _tokenType[tokenId] = EventTicketType;
+        _tokentweetId[tokenId] = tweetIdType;
     }
     
     function _burn(address owner, uint256 tokenId) internal {
@@ -499,10 +488,10 @@ contract ERC721Metadata is Context, ERC165, ERC721, IERC721Metadata {
         // Clear metadata (if any)
         if (bytes(_tokenURIs[tokenId]).length != 0) {
             delete _tokenURIs[tokenId];
-            delete _tokenName[tokenId];
-            delete _tokenType[tokenId];
-            delete _tokenDate[tokenId];
-            delete _tokenLocation[tokenId];
+            delete _tokenauthor[tokenId];
+            delete _tokentweet[tokenId];
+            delete _tokentweetId[tokenId];
+            
         }
     }
 }
