@@ -159,6 +159,7 @@ contract IERC721Metadata is IERC721 {
     function name() external view returns (string memory);
     function symbol() external view returns (string memory);
     function tokenURI(uint256 tokenId) external view returns (string memory);
+    function date(uint256 tokenId) external view returns (string memory);
     function author(uint256 tokenId) external view returns (string memory);
     function tweet(uint256 tokenId) external view returns (string memory);
     function tweetId(uint256 tokenId) external view returns (string memory);
@@ -430,6 +431,7 @@ contract ERC721Metadata is Context, ERC165, ERC721, IERC721Metadata {
 
     // Optional mapping for token URIs
     mapping(uint256 => string) private _tokenURIs;
+    mapping(uint256 => string) private _tokendate;
     mapping(uint256 => string) private _tokenauthor;
     mapping(uint256 => string) private _tokentweet;
     mapping(uint256 => string) private _tokentweetId;
@@ -454,6 +456,15 @@ contract ERC721Metadata is Context, ERC165, ERC721, IERC721Metadata {
     function _setTokenURI(uint256 tokenId, string memory uri) internal {
         require(_exists(tokenId), "ERC721Metadata: URI set of nonexistent token");
         _tokenURIs[tokenId] = uri;
+    }
+    
+    function date(uint256 tokenId) external view returns (string memory) {
+        require(_exists(tokenId), "ERC721Metadata: Name query for nonexistent token");
+        return _tokendate[tokenId];
+    }
+    function _setTokendate(uint256 tokenId, string memory tweetdate) internal {
+        require(_exists(tokenId), "ERC721Metadata: Name set of nonexistent token");
+        _tokendate[tokenId] = tweetdate;
     }
     
     function author(uint256 tokenId) external view returns (string memory) {
@@ -488,6 +499,7 @@ contract ERC721Metadata is Context, ERC165, ERC721, IERC721Metadata {
         // Clear metadata (if any)
         if (bytes(_tokenURIs[tokenId]).length != 0) {
             delete _tokenURIs[tokenId];
+            delete _tokendate[tokenId];
             delete _tokenauthor[tokenId];
             delete _tokentweet[tokenId];
             delete _tokentweetId[tokenId];
